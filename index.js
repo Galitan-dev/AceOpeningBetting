@@ -1,11 +1,4 @@
-const dotenv = require('dotenv');
-const path = require('path');
 const { TelegramBaseController, TextCommand, Telegram } = require('telegram-node-bot');
-
-dotenv.config({
-    path: path.join(__dirname, '.env'),
-    encoding: 'utf8',
-});
 
 const tg = new Telegram(process.env.TOKEN);
 
