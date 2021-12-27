@@ -9,7 +9,7 @@ if (!process.env.TOKEN) {
     });
 }
 
-const tg = new Telegram(config.telegram);
+const tg = new Telegram(process.env.TOKEN, config.telegram);
 
 (async () => {
     setInterval(() => {
