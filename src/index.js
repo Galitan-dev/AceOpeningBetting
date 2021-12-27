@@ -13,7 +13,7 @@ const tg = new Telegram(config.telegram);
 
 (async () => {
     setInterval(() => {
-        tg.sendNotification(pickPlayer(), pickPlayer(), "Roland-Garros")
+        tg.sendNotification(pickPlayer(), pickPlayer(), "Roland-Garros");
     }, 5000);
 })();
 
