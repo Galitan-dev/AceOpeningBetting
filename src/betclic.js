@@ -40,13 +40,11 @@ module.exports = class {
             .map(async url => {
 
                 let bet = new Bet(url.substring(1, url.length - 1), this);
-                console.log(bet)
-                if (this.db.containsBet(bet.name)) return;
+                if (await this.db.containsBet(bet.name)) return;
 
                 await bet.fetchInfos();
-                console.log(bet);
                 if (bet.isAceOpen) {
-                    this.db.addBet(bet.name);
+                    await this.db.addBet(bet.name);
                     this.emitOpen(bet);
                 }
 
