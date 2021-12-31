@@ -9,7 +9,7 @@ module.exports = class DB {
 
         db.on('error', err => console.error("MongoDB connection error:", err));
         db.on('open', () => {
-            log("Connected!");
+            console.log("Connected!");
             this.listener?.();
         });
     }
