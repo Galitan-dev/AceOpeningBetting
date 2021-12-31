@@ -19,6 +19,7 @@ module.exports = class {
 
     async watch() {
         this.fetchBets();
+        console.log("hey")
         setInterval(this.fetchBets.bind(this), 10000);
     }
 
