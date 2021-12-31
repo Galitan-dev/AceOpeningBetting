@@ -19,7 +19,6 @@ module.exports = class {
 
     async watch() {
         this.fetchBets();
-        console.log("hey")
         setInterval(this.fetchBets.bind(this), 10000);
     }
 
@@ -41,6 +40,7 @@ module.exports = class {
             .map(async url => {
 
                 let bet = new Bet(url.substring(1, url.length - 1), this);
+                console.log(bet)
                 if (this.db.containsBet(bet.name)) return;
 
                 await bet.fetchInfos();
