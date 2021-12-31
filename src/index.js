@@ -1,23 +1,23 @@
 const path = require('path');
 const config = require('../config.json');
 const Telegram = require('./telegram');
+const Betclic = require('./betclic');
+const DB = require('./db');
 
 if (!process.env.TOKEN) {
     require('dotenv').config({
-        path: path.join(__dirname, '.env'),
+        path: path.join(__dirname, '../.env'),
         encoding: 'utf8',
     });
 }
 
+const db = new DB("mongodb://172.17.0.4:27017/ace-opening-bot");
 const tg = new Telegram(process.env.TOKEN, config.telegram);
+const bt = new Betclic(db);
 
-(async () => {
-    setInterval(() => {
-        tg.sendNotification(pickPlayer(), pickPlayer(), "Roland-Garros");
-    }, 5000);
-})();
+bt.onOpen(bet => {
+    tg.sendNotification(bet.player1, bet.player2, bet.tournament);
+});
 
-function pickPlayer() {
-    const random = Math.floor(Math.random() * config.players.length);
-    return config.players[random];
-}
+db.onReady(() => bt.watch());
+// bt.test();

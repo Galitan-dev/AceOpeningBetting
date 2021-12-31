@@ -1,6 +1,6 @@
 const { Axios } = require('axios');
 
-module.exports = class Telegram {
+module.exports = class {
 
     /**
      * 
