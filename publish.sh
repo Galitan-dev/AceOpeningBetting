@@ -14,7 +14,7 @@ echo "Restarting remote container"
 
 echo "Authenticating"
 token=$(https POST https://portainer.galitan.ml/api/auth Username="admin" Password="5fluWzi3uGD64m7B" | jq -r '.jwt')
-container="864a3a6e386541791c568b21b3ffffa9408c8ca1fb3406a09a733fbfec124107"
+container="2049d58fd3bd9a6b068b8b6354d46752d713eb456df0e1b42ef76ac8e6edd8a9"
 echo "Received token: $token"
 echo
 

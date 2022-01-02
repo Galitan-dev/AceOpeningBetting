@@ -14,6 +14,11 @@ module.exports = class {
         this.events = new EventEmitter();
         this.axios = new Axios({
             baseURL: "https://www.betclic.fr/",
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache',
+                'Expires': '0',
+            },
         });
     }
 
