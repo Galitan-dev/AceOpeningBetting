@@ -8,7 +8,7 @@ mkdir -p /app
 cd /app
 git clone https://galitan-dev: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@github.com/Galitan-dev/AceOpeningBetting /app
 
-curl "$BASE_URL/sendMessage?text=🟢 Le bot démarre !&chat_id=-1001598334230"
+curl $BASE_URL'/sendMessage?text=🟢 Le bot démarre !&chat_id=-1001598334230'
 
 echo Installing packages
 yarn --production
@@ -19,7 +19,7 @@ _term() {
 }
 
 catch() {
-    curl "$BASE_URL/sendMessage?text=🔴 Le bot démara été arrêté !&chat_id=-1001598334230"
+    curl $BASE_URL'/sendMessage?text=🔴 Le bot démara été arrêté !&chat_id=-1001598334230'
     echo "Caught ERROR signal!"
 }
 
