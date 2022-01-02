@@ -19,7 +19,7 @@ module.exports = class {
 
     async watch() {
         this.fetchBets();
-        setInterval(this.fetchBets.bind(this), 10000);
+        setInterval(this.fetchBets.bind(this), 15000);
     }
 
     async test() {
@@ -41,7 +41,7 @@ module.exports = class {
         }
         
         const bets = await Promise.all(res.data.match(/"\/tennis\-s2.+\/.+"/gi)
-            .map(async url => {
+            ?.map(async url => {
 
                 let bet = new Bet(url.substring(1, url.length - 1), this);
                 if (await this.db.containsBet(bet.name)) return;
