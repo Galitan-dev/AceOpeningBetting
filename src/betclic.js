@@ -35,6 +35,10 @@ module.exports = class {
         } catch (err) {
             throw new Error("Unable to fetch bets: " + err.message);
         }
+
+        if (res.status != 200) {
+            return console.error("Error", res.status + ":", res.statusText);
+        }
         
         const bets = await Promise.all(res.data.match(/"\/tennis\-s2.+\/.+"/gi)
             .map(async url => {
@@ -49,7 +53,7 @@ module.exports = class {
                 }
 
                 return bet;
-            }));
+            }) || []);
 
         return bets;
     }
