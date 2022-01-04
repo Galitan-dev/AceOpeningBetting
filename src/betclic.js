@@ -1,7 +1,7 @@
 const { EventEmitter } = require('events');
 const { Axios } = require('axios');
 const DB = require('./db');
-const proxyList = require('proxylist');
+const ProxyList = require('./proxies');
 
 module.exports = class {
 
@@ -22,10 +22,13 @@ module.exports = class {
     }
 
     async watch() {
-        const proxies = (await proxyList.main())
-            .filter(p => p.match(/(\d+\.){3}\d+:\d+/));
-        this.fetchBets(proxies);
-        setInterval(this.fetchBets.bind(this, proxies), 2000);
+        const proxyList = new ProxyList();
+        await proxyList.filter(async proxy => {
+            true
+        });
+        
+        this.fetchBets(proxyList);
+        setInterval(this.fetchBets.bind(this, proxyList), 2000);
     }
 
     async test() {
@@ -38,7 +41,7 @@ module.exports = class {
         let res;
         try {
             res = await this.axios.get("/tennis-s2", {
-                proxy: (([host, port]) => ({ host, port }))(proxies.random().split(':'))
+                proxy: proxies.random(),
             });
         } catch (err) {
             throw new Error("Unable to fetch bets: " + err.message);
@@ -54,7 +57,7 @@ module.exports = class {
                 let bet = new Bet(url.substring(1, url.length - 1), this);
                 if (await this.db.containsBet(bet.name)) return;
 
-                await bet.fetchInfos((([host, port]) => ({ host, port }))(proxies.random().split(':')));
+                await bet.fetchInfos(proxies.random());
                 if (bet.isAceOpen) {
                     await this.db.addBet(bet.name);
                     this.emitOpen(bet);

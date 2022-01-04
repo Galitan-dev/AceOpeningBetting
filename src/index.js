@@ -3,7 +3,6 @@ const config = require('../config.json');
 const Telegram = require('./telegram');
 const Betclic = require('./betclic');
 const DB = require('./db');
-require('./utils');
 
 if (!process.env.TOKEN) {
     require('dotenv').config({
@@ -12,7 +11,7 @@ if (!process.env.TOKEN) {
     });
 }
 
-const db = new DB("mongodb://172.17.0.4:27017/ace-opening-bot");
+// const db = new DB("mongodb://172.17.0.4:27017/ace-opening-bot");
 const tg = new Telegram(process.env.TOKEN, config.telegram);
 const bt = new Betclic(db);
 
@@ -20,5 +19,6 @@ bt.onOpen(bet => {
     tg.sendNotification(bet.player1, bet.player2, bet.tournament);
 });
 
-db.onReady(() => bt.watch());
+// db.onReady(() => bt.watch());
+bt.watch()
 // bt.test();
