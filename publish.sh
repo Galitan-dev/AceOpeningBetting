@@ -1,5 +1,3 @@
-#!/bin/bash
-
 exa -lT --icons bin
 
 echo
