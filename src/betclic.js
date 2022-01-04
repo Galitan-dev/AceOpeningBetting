@@ -38,7 +38,7 @@ module.exports = class {
         let res;
         try {
             res = await this.axios.get("/tennis-s2", {
-                proxy: (([host, p]) => ({ host, port }))(proxies.random().split(':'))
+                proxy: (([host, port]) => ({ host, port }))(proxies.random().split(':'))
             });
         } catch (err) {
             throw new Error("Unable to fetch bets: " + err.message);
@@ -54,7 +54,7 @@ module.exports = class {
                 let bet = new Bet(url.substring(1, url.length - 1), this);
                 if (await this.db.containsBet(bet.name)) return;
 
-                await bet.fetchInfos((([host, p]) => ({ host, port }))(proxies.random().split(':')));
+                await bet.fetchInfos((([host, port]) => ({ host, port }))(proxies.random().split(':')));
                 if (bet.isAceOpen) {
                     await this.db.addBet(bet.name);
                     this.emitOpen(bet);
