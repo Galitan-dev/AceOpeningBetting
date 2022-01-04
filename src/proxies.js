@@ -13,6 +13,7 @@ module.exports = class Proxylist {
             // proxies.push(...(await proxylist.second()));
             proxies = proxies.filter(p => p.match(/(\d+\.){3}\d+:\d+/));
             proxies = proxies.map(p => ({ host: p.split(':')[0], port: p.split(':')[1] }));
+            proxies = proxies.slice(0, 3);
         
         this.proxies = [];
 
