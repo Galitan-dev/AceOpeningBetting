@@ -1,8 +1,7 @@
 const { EventEmitter } = require('events');
 const { Axios } = require('axios');
-const fs = require('fs');
-const DB = require('./db')
-const path = require('path');
+const DB = require('./db');
+const proxyList = require('proxylist');
 
 module.exports = class {
 
@@ -11,7 +10,7 @@ module.exports = class {
      */
     constructor(db) {
         this.db = db;
-        this.events = new EventEmitter();
+        this.events = new EventEmitter()
         this.axios = new Axios({
             baseURL: "https://www.betclic.fr/",
             headers: {
@@ -23,8 +22,10 @@ module.exports = class {
     }
 
     async watch() {
-        this.fetchBets();
-        setInterval(this.fetchBets.bind(this), 15000);
+        const proxies = (await proxyList.main())
+            .filter(p => p.match(/(\d+\.){3}\d+:\d+/));
+        this.fetchBets(proxies);
+        setInterval(this.fetchBets.bind(this, proxies), 2000);
     }
 
     async test() {
@@ -33,10 +34,12 @@ module.exports = class {
         console.log(bet);
     }
 
-    async fetchBets() {
+    async fetchBets(proxies) {
         let res;
         try {
-            res = await this.axios.get("/tennis-s2");
+            res = await this.axios.get("/tennis-s2", {
+                proxy: (([host, p]) => ({ host, port }))(proxies.random().split(':'))
+            });
         } catch (err) {
             throw new Error("Unable to fetch bets: " + err.message);
         }
@@ -51,7 +54,7 @@ module.exports = class {
                 let bet = new Bet(url.substring(1, url.length - 1), this);
                 if (await this.db.containsBet(bet.name)) return;
 
-                await bet.fetchInfos();
+                await bet.fetchInfos((([host, p]) => ({ host, port }))(proxies.random().split(':')));
                 if (bet.isAceOpen) {
                     await this.db.addBet(bet.name);
                     this.emitOpen(bet);
@@ -87,10 +90,10 @@ class Bet {
         this.betclic = betclic;
     }
 
-    async fetchInfos() {
+    async fetchInfos(proxy) {
         let res;
         try {
-            res = await this.betclic.axios.get(this.url);
+            res = await this.betclic.axios.get(this.url, { proxy });
         } catch (err) {
             throw new Error("Unable to fetch bet: " + err.message);
         }

@@ -3,6 +3,7 @@ const config = require('../config.json');
 const Telegram = require('./telegram');
 const Betclic = require('./betclic');
 const DB = require('./db');
+require('./utils');
 
 if (!process.env.TOKEN) {
     require('dotenv').config({

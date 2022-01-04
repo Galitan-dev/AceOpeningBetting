@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "axios": "^0.24.0",
-    "mongoose": "^6.1.4"
+    "mongoose": "^6.1.4",
+    "proxylist": "^1.0.2"
   },
   "name": "ace-opening-betting",
   "version": "1.0.0",
