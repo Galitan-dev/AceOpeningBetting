@@ -24,6 +24,7 @@ module.exports = class {
     async watch() {
         const proxyList = new ProxyList();
         await proxyList.filter(async (proxy, index) => {
+            return true;
             let res;
             try {
                 res = await this.axios.get("/tennis-s2", {

@@ -19,6 +19,6 @@ bt.onOpen(bet => {
     tg.sendNotification(bet.player1, bet.player2, bet.tournament);
 });
 
-// db.onReady(() => bt.watch());
-bt.watch()
+db.onReady(() => bt.watch());
+// bt.watch();
 // bt.test();

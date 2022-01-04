@@ -21,7 +21,7 @@ module.exports = class Proxylist {
             if (!proxy) return;
 
             if (await callback(proxy, i)) this.proxies.push(proxy);
-            console.log(filledBar(proxies.length, i + 1));
+            console.log(...filledBar(proxies.length, i + 1).map((s, i) => i == 0 ? s : Math.floor(parseFloat(s)) + "%"));
 
             await test(i + 1);
         };
