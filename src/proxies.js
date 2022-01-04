@@ -20,7 +20,7 @@ module.exports = class Proxylist {
             const proxy = proxies[i];
             if (!proxy) return;
 
-            if (await callback(p, i)) this.proxies.push(p);
+            if (await callback(proxy, i)) this.proxies.push(proxy);
             console.log(filledBar(proxies.length, i + 1));
 
             await test(i + 1);
