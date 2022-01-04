@@ -23,8 +23,21 @@ module.exports = class {
 
     async watch() {
         const proxyList = new ProxyList();
-        await proxyList.filter(async proxy => {
-            true
+        await proxyList.filter(async (proxy, index) => {
+            let res;
+            try {
+                res = await this.axios.get("/tennis-s2", {
+                    proxy,
+                });
+            } catch (err) {
+                return false;
+            }
+
+            if (res.status != 200) {
+                return false;
+            }
+
+            return true;
         });
         
         this.fetchBets(proxyList);

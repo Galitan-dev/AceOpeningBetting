@@ -3,19 +3,28 @@ const proxylist = require('proxylist');
 module.exports = class Proxylist {
     
     /**
-     * @param {({ host: string, port: number }) => Promise<boolean>} callback 
+     * @param {(proxy: { host: string, port: number }, index: number) => Promise<boolean>} callback 
      */
     async filter(callback) {
         /** @type {string[]} */
         let proxies = await proxylist.main();
-            proxies.push(...(await proxylist.first()));
-            proxies.push(...(await proxylist.second()));
+            // proxies.push(...(await proxylist.first()));
+            // proxies.push(...(await proxylist.second()));
             proxies = proxies.filter(p => p.match(/(\d+\.){3}\d+:\d+/));
-            proxies = proxies.map(p => ({ host: p.host, port: p.port }));
-            proxies = await Promise.all(proxies.map(async p => await callback(p) ? p : null));
-            proxies = proxies.filter(p => !!p);
+            proxies = proxies.map(p => ({ host: p.split(':')[0], port: p.split(':')[1] }));
+        
+        this.proxies = [];
+        const progress = require('progressbar')
+            .create()
+            .step('Filtering Proxies')
+            .setTotal(proxies.length);
 
-        this.proxies = proxies;
+        await Promise.all(proxies.map(async (p, i) => {
+            if (await callback(p, i)) this.proxies.push(p);
+            progress.addTick();
+        }));
+
+        progress.finish();
     }
 
     random() {

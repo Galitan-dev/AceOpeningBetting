@@ -11,7 +11,7 @@ if (!process.env.TOKEN) {
     });
 }
 
-// const db = new DB("mongodb://172.17.0.4:27017/ace-opening-bot");
+const db = new DB("mongodb://172.17.0.4:27017/ace-opening-bot");
 const tg = new Telegram(process.env.TOKEN, config.telegram);
 const bt = new Betclic(db);
 
