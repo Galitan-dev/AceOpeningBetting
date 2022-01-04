@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "axios": "^0.24.0",
+    "https-proxy-agent": "^5.0.0",
     "mongoose": "^6.1.4",
     "proxylist": "^1.0.2",
     "string-progressbar": "^1.0.4"

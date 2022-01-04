@@ -2,6 +2,7 @@ const { EventEmitter } = require('events');
 const { Axios } = require('axios');
 const DB = require('./db');
 const ProxyList = require('./proxies');
+const HttpsProxyAgent = require('https-proxy-agent')
 
 module.exports = class {
 
@@ -27,7 +28,7 @@ module.exports = class {
             let res;
             try {
                 res = await this.axios.get("/tennis-s2", {
-                    proxy,
+                    httpsAgent: new HttpsProxyAgent(`https://${proxy.host}:${proxy.port}`),
                 });
             } catch (err) {
                 return false;
@@ -51,10 +52,10 @@ module.exports = class {
     }
 
     async fetchBets(proxies) {
-        let res;
+        let res, proxy = proxies.random();
         try {
             res = await this.axios.get("/tennis-s2", {
-                proxy: proxies.random(),
+                httpsAgent: new HttpsProxyAgent(`https://${proxy.host}:${proxy.port}`),
             });
         } catch (err) {
             throw new Error("Unable to fetch bets: " + err.message);
@@ -109,7 +110,9 @@ class Bet {
     async fetchInfos(proxy) {
         let res;
         try {
-            res = await this.betclic.axios.get(this.url, { proxy });
+            res = await this.betclic.axios.get(this.url, { 
+                httpsAgent: new HttpsProxyAgent(`https://${proxy.host}:${proxy.port}`),
+            });
         } catch (err) {
             throw new Error("Unable to fetch bet: " + err.message);
         }
