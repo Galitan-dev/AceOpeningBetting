@@ -42,7 +42,7 @@ module.exports = class {
         // });
         
         this.fetchBets(proxyList);
-        setInterval(this.fetchBets.bind(this, proxyList), 15000 / (proxyList.proxies.length - 1));
+        setInterval(this.fetchBets.bind(this, proxyList), 15000);// / (proxyList.proxies.length - 1));
     }
 
     async test() {
