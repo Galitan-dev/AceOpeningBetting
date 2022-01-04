@@ -42,7 +42,7 @@ module.exports = class {
         // });
         
         this.fetchBets(proxyList);
-        setInterval(this.fetchBets.bind(this, proxyList), 15000);// / (proxyList.proxies.length - 1));
+        setInterval(this.fetchBets.bind(this, proxyList), 3000);// / (proxyList.proxies.length - 1));
     }
 
     async test() {
@@ -61,6 +61,10 @@ module.exports = class {
 
         if (res.status != 200) {
             return console.error("Error", res.status + ":", res.statusText);
+        }
+
+        if (!res.data.match(/"\/tennis\-s2.+\/.+"/gi)) {
+            return console.error("Error parsing response (Maybe we have been banned?)");
         }
         
         const bets = await Promise.all(res.data.match(/"\/tennis\-s2.+\/.+"/gi)
