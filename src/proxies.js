@@ -1,4 +1,5 @@
 const proxylist = require('proxylist');
+const progressbar = require('string-progressbar');
 
 module.exports = class Proxylist {
     
@@ -22,6 +23,7 @@ module.exports = class Proxylist {
         await Promise.all(proxies.map(async (p, i) => {
             if (await callback(p, i)) this.proxies.push(p);
             progress.addTick();
+            console.log(...progressbar.filledBar(progress.addTotal, progress.getTick()));
         }));
 
         progress.finish();
