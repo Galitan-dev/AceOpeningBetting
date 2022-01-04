@@ -14,6 +14,15 @@ module.exports = class Proxylist {
             proxies = proxies.filter(p => p.match(/(\d+\.){3}\d+:\d+/));
             proxies = proxies.map(p => ({ host: p.split(':')[0], port: p.split(':')[1] }));
             proxies = proxies.slice(0, 3);
+
+        proxies = [
+            { host: '54.37.160.93', port: 1080 },
+            { host: '185.128.25.22', port: 8118 },
+            { host: '212.129.15.88', port: 8080 },
+            { host: '62.210.53.34', port: 3128 },
+            { host: '51.158.160.195', port: 8118 },
+            { host: '62.4.16.243', port: 3128 },
+        ]
         
         this.proxies = [];
 
