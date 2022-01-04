@@ -1,5 +1,5 @@
 const proxylist = require('proxylist');
-const progressbar = require('string-progressbar');
+const { filledBar } = require('string-progressbar');
 
 module.exports = class Proxylist {
     
@@ -15,18 +15,17 @@ module.exports = class Proxylist {
             proxies = proxies.map(p => ({ host: p.split(':')[0], port: p.split(':')[1] }));
         
         this.proxies = [];
-        const progress = require('progressbar')
-            .create()
-            .step('Filtering Proxies')
-            .setTotal(proxies.length);
 
-        await Promise.all(proxies.map(async (p, i) => {
+        const test = async i => {
+            const proxy = proxies[i];
+            if (!proxy) return;
+
             if (await callback(p, i)) this.proxies.push(p);
-            progress.addTick();
-            console.log(...progressbar.filledBar(progress.addTotal, progress.getTick()));
-        }));
+            console.log(filledBar(proxies.length, i + 1));
 
-        progress.finish();
+            await test(i + 1);
+        };
+        await test(0);
     }
 
     random() {
