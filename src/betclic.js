@@ -24,22 +24,22 @@ module.exports = class {
 
     async watch() {
         const proxyList = new ProxyList();
-        await proxyList.filter(async (proxy, index) => {
-            let res;
-            try {
-                res = await this.axios.get("/tennis-s2", {
-                    httpsAgent: new HttpsProxyAgent(`https://${proxy.host}:${proxy.port}`),
-                });
-            } catch (err) {
-                return false;
-            }
+        // await proxyList.filter(async (proxy, index) => {
+        //     let res;
+        //     try {
+        //         res = await this.axios.get("/tennis-s2", {
+        //             httpsAgent: new HttpsProxyAgent(`https://${proxy.host}:${proxy.port}`),
+        //         });
+        //     } catch (err) {
+        //         return false;
+        //     }
 
-            if (res.status != 200) {
-                return false;
-            }
+        //     if (res.status != 200) {
+        //         return false;
+        //     }
 
-            return true;
-        });
+        //     return true;
+        // });
         
         this.fetchBets(proxyList);
         setInterval(this.fetchBets.bind(this, proxyList), 15000 / (proxyList.proxies.length - 1));
@@ -52,11 +52,9 @@ module.exports = class {
     }
 
     async fetchBets(proxies) {
-        let res, proxy = proxies.random();
+        let res;
         try {
-            res = await this.axios.get("/tennis-s2", {
-                httpsAgent: new HttpsProxyAgent(`https://${proxy.host}:${proxy.port}`),
-            });
+            res = await this.axios.get("/tennis-s2");
         } catch (err) {
             throw new Error("Unable to fetch bets: " + err.message);
         }
@@ -71,7 +69,7 @@ module.exports = class {
                 let bet = new Bet(url.substring(1, url.length - 1), this);
                 if (await this.db.containsBet(bet.name)) return;
 
-                await bet.fetchInfos(proxies.random());
+                await bet.fetchInfos();
                 if (bet.isAceOpen) {
                     await this.db.addBet(bet.name);
                     this.emitOpen(bet);
@@ -110,9 +108,7 @@ class Bet {
     async fetchInfos(proxy) {
         let res;
         try {
-            res = await this.betclic.axios.get(this.url, { 
-                httpsAgent: new HttpsProxyAgent(`https://${proxy.host}:${proxy.port}`),
-            });
+            res = await this.betclic.axios.get(this.url);
         } catch (err) {
             throw new Error("Unable to fetch bet: " + err.message);
         }
