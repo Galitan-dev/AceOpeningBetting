@@ -1,4 +1,5 @@
 const { Axios } = require('axios');
+const { Bet } = require('./betclic');
 
 module.exports = class {
 
@@ -19,17 +20,16 @@ module.exports = class {
     }
 
     /**
-     * @param {string} player1 
-     * @param {string} player2 
-     * @param {string} tournament 
+     * @param {Bet} bet 
      * @returns {Promise<MessageResult>}
      */
-    async sendNotification(player1, player2, tournament) {
+    async sendNotification(bet) {
         let notif = this.notification_template
             .join('\n')
-            .replace(/\{player1\}/g, player1)
-            .replace(/\{player2\}/g, player2)
-            .replace(/\{tournament}/g, tournament);
+            .replace(/\{player1\}/g, bet.player1)
+            .replace(/\{player2\}/g, bet.player2)
+            .replace(/\{tournament}/g, bet.tournament)
+            .replace(/\{link}/g, bet.url);
 
     
         let res;

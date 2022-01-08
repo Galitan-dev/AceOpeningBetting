@@ -4,7 +4,8 @@
         "notification_template": [
             "🎾 {player1} vs {player2} ",
             "💢 {tournament}",
-            "⚠️ Aces disponible "
+            "⚠️ Aces disponible ",
+            "🔗 {link}"
         ]
     }
 }
