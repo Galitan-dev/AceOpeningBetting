@@ -29,7 +29,7 @@ module.exports = class {
             .replace(/\{player1\}/g, bet.player1)
             .replace(/\{player2\}/g, bet.player2)
             .replace(/\{tournament}/g, bet.tournament)
-            .replace(/\{link}/g, bet.url);
+            .replace(/\{link}/g, "https://www.betclic.fr" + "bet.url");
 
     
         let res;
