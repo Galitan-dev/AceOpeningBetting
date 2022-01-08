@@ -101,14 +101,14 @@ module.exports = class {
 
 }
 
-module.exports.Bet = class Bet {
-
+class Bet {
+    
     constructor(url, betclic) {
         this.url = url;
         this.name = url.match(/[^\/]+$/i)[0];
         this.betclic = betclic;
     }
-
+    
     async fetchInfos(proxy) {
         let res;
         try {
@@ -116,16 +116,18 @@ module.exports.Bet = class Bet {
         } catch (err) {
             throw new Error("Unable to fetch bet: " + err.message);
         }
-
+        
         this.isAceOpen = !!res.data.match(/Aces/);
-
+        
         if (!this.isAceOpen) return;
-
+        
         const players = res.data.match(/<div class="scoreboard_contestantLabel">[\n<!-> ]*.*[\n ]*<\/div>/gmi);
         this.player1 = players[0].split("\n").slice(1).join("\n").match(/[^ ]+ [^\n ]+/gi)?.[0];
         this.player2 = players[1].split("\n").slice(1).join("\n").match(/[^ ]+ [^\n ]+/gi)?.[0];
         this.tournament = res.data.match(/<span class="marquee_content">[\n<!-> ]*.*[\n ]*<\/span>/mi)?.[0]
-            .split("\n").slice(1).join("\n").match(/[^ ].*[^\n ]/gi)?.[0];
+        .split("\n").slice(1).join("\n").match(/[^ ].*[^\n ]/gi)?.[0];
+        
     }
-
 }
+
+module.exports.Bet = Bet; 
