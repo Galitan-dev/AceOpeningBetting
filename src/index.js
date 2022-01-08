@@ -16,7 +16,7 @@ const tg = new Telegram(process.env.TOKEN, config.telegram);
 const bt = new Betclic(db);
 
 bt.onOpen(bet => {
-    tg.sendNotification(bet.player1, bet.player2, bet.tournament);
+    tg.sendNotification(bet);
 });
 
 db.onReady(() => bt.watch());
