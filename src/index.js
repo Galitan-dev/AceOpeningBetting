@@ -20,5 +20,6 @@ bt.onOpen(bet => {
 });
 
 db.onReady(() => bt.watch());
+bt.fetchBets();
 // bt.watch();
 // bt.test();

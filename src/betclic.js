@@ -13,7 +13,6 @@ module.exports = class {
         this.db = db;
         this.events = new EventEmitter()
         this.axios = new Axios({
-            baseURL: "https://www.betclic.fr/",
             headers: {
                 'Cache-Control': 'no-cache',
                 'Pragma': 'no-cache',
@@ -54,7 +53,7 @@ module.exports = class {
     async fetchBets(proxies) {
         let res;
         try {
-            res = await this.axios.get("/tennis-s2");
+            res = await this.axios.get("https://offer.cdn.betclic.fr/api/pub/v4/events?application=2&countrycode=fr&hasSwitchMtc=true&language=fr&limit=20&offset=0&sitecode=frfr&sortBy=ByLiveRankingPreliveDate&sportIds=2");
         } catch (err) {
             throw new Error("Unable to fetch bets: " + err.message);
         }
@@ -63,9 +62,14 @@ module.exports = class {
             return console.error("Error", res.status + ":", res.statusText);
         }
 
-        if (!res.data.match(/"\/tennis\-s2.+\/.+"/gi)) {
+        let data;
+        try {
+            data = JSON.parse(res.data);
+        } catch(err) {
             return console.error("Error parsing response (Maybe we have been banned?)");
         }
+
+        console.log(data);
         
         const bets = await Promise.all(res.data.match(/"\/tennis\-s2.+\/.+"/gi)
             ?.map(async url => {
